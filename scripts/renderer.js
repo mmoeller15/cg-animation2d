@@ -12,7 +12,19 @@ class Renderer {
         this.fps = fps;
         this.start_time = null;
         this.prev_time = null;
+
+        this.ball_tx = null;
+        this.ball_ty = null;
+
+        this.poly0_r = null;
+        this.poly1_r = null;
+        this.poly2_r = null;
+
+        this.poly1_s = null;
+        this.poly2_s = null;
+
     }
+
 
     // flag:  bool
     limitFps(flag) {
@@ -65,7 +77,15 @@ class Renderer {
 
     //
     updateTransforms(time, delta_time) {
-        // TODO: update any transformations needed for animation
+        this.ball_tx = this.ball_tx *(time + delta_time);
+        this.ball_ty = this.ball_ty *(time + delta_time);
+        
+        this.poly0_r = this.poly0_r *(time + delta_time);
+        this.poly1_r = this.poly1_r *(time + delta_time);
+        this.poly2_r = this.poly2_r *(time + delta_time);
+
+        this.poly1_s = this.poly1_s *(time + delta_time);
+        this.poly2_s = this.poly2_s *(time + delta_time);
     }
     
     //
