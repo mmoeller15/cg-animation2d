@@ -16,6 +16,42 @@ class Renderer {
         this.ball_tx = null;
         this.ball_ty = null;
 
+        this.ball_v_x = 250;
+        this.ball_v_y = 250;
+
+        this.ball_center = {x: 200, y: 200};
+        this.ball_radius = 40;
+
+        this.ball_points = [
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(0), this.ball_center.y + this.ball_radius * Math.sin(0), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 2), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(2 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(2 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI), this.ball_center.y + this.ball_radius * Math.sin(Math.PI), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(13 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(13 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(4 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(4 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(17 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(17 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 2), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(19 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(19 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(23 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(23 * Math.PI / 12), 1),
+        ];
+
         this.poly0_r = null;
         this.poly1_r = null;
         this.poly2_r = null;
@@ -77,15 +113,19 @@ class Renderer {
 
     //
     updateTransforms(time, delta_time) {
-        this.ball_tx = this.ball_tx *(time + delta_time);
-        this.ball_ty = this.ball_ty *(time + delta_time);
+        // TODO: update any transformations needed for animation
         
+        this.ball_tx = this.ball_v_x *((delta_time)/1000.0);
+        this.ball_ty = this.ball_v_y *((delta_time)/1000.0);
+
+
         this.poly0_r = this.poly0_r *(time + delta_time);
         this.poly1_r = this.poly1_r *(time + delta_time);
         this.poly2_r = this.poly2_r *(time + delta_time);
 
         this.poly1_s = this.poly1_s *(time + delta_time);
         this.poly2_s = this.poly2_s *(time + delta_time);
+        
     }
     
     //
@@ -112,17 +152,32 @@ class Renderer {
     drawSlide0() {
         // TODO: draw bouncing ball (circle that changes direction whenever it hits an edge)
         
-        
         // Following line is example of drawing a single polygon
         // (this should be removed/edited after you implement the slide)
-        let diamond = [
+        /* let diamond = [
             Vector3(400, 150, 1),
             Vector3(500, 300, 1),
             Vector3(400, 450, 1),
             Vector3(300, 300, 1)
         ];
         let teal = [0, 128, 128, 255];
-        this.drawConvexPolygon(diamond, teal);
+        this.drawConvexPolygon(diamond, teal); */
+
+        for(let i = 0; i < this.ball_points.length; i++){
+           this.ball_points[i] = Vector3((this.ball_points[i].values[0][0] + this.ball_tx), (this.ball_points[i].values[1][0] + this.ball_ty), 1);
+        }
+
+        // hits edge left/right - reverse velocity in x
+        if(this.ball_points[0].values[0][0] >= this.canvas.width || this.ball_points[12].values[0][0] <= 0) {
+                this.ball_v_x = -1 * this.ball_v_x;
+        }
+        // hits edge top/bottom - reverse velocity in y
+        if(this.ball_points[6].values[1][0] >= this.canvas.height || this.ball_points[18].values[1][0] <= 0) {
+            this.ball_v_y = -1 * this.ball_v_y;
+        }
+
+        this.drawConvexPolygon(this.ball_points, [123, 66, 245, 255]);
+        
     }
 
     //
