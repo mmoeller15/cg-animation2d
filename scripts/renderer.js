@@ -52,9 +52,15 @@ class Renderer {
             Vector3(this.ball_center.x + this.ball_radius * Math.cos(23 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(23 * Math.PI / 12), 1),
         ];
 
-        this.poly0_r = null;
-        this.poly1_r = null;
-        this.poly2_r = null;
+        this.rotationTransform0 = new Matrix(3,3);
+        
+        this.poly0_vel_r = .3;
+        this.poly1_vel_r = 7;
+        this.poly2_vel_r = -5;
+
+        this.poly0_r = 0;
+        this.poly1_r = Math.PI/4;
+        this.poly2_r = Math.PI/6;
 
         this.poly1_s = null;
         this.poly2_s = null;
@@ -119,9 +125,9 @@ class Renderer {
         this.ball_ty = this.ball_v_y *((delta_time)/1000.0);
 
 
-        this.poly0_r = this.poly0_r *(time + delta_time);
-        this.poly1_r = this.poly1_r *(time + delta_time);
-        this.poly2_r = this.poly2_r *(time + delta_time);
+        this.poly0_r = (this.poly0_r + this.poly0_vel_r*(delta_time/1000)) % (2*Math.PI);
+        this.poly1_r = (this.poly1_r + this.poly1_vel_r*(delta_time/1000)) % (2*Math.PI);
+        this.poly2_r = (this.poly2_r + this.poly2_vel_r*(delta_time/1000)) % (2*Math.PI);
 
         this.poly1_s = this.poly1_s *(time + delta_time);
         this.poly2_s = this.poly2_s *(time + delta_time);
@@ -182,10 +188,103 @@ class Renderer {
 
     //
     drawSlide1() {
-        // TODO: draw at least 3 polygons that spin about their own centers
-        //   - have each polygon spin at a different speed / direction
+        let teal = [0, 128, 128, 255];
+        let gold = [218,165,32, 255];
+        let red = [158, 0, 0 , 255];
+        let originTranslate = new Matrix(3,3);
+        let returnTranslate = new Matrix(3,3);
+
+
+        let poly0_points = [
+            {x: 300, y: 300},
+            {x: 300, y: 350},
+            {x: 250, y: 300}
+        ]
+
+        let poly1_points = [
+            {x: 450, y: 450},
+            {x: 500, y: 500},
+            {x: 450, y: 550},
+            {x: 425, y: 525},
+            {x: 400, y: 474}
+        ]
+        let poly2_points = [
+            {x: 150, y: 100},
+            {x: 250, y: 150},
+            {x: 200, y: 100},
+            {x: 125, y: 50}
+        ]
+
+
+        let poly0_center = {x: 0, y: 0 };
+        for (let i = 0; i < poly0_points.length; i++){
+            poly0_center.x = poly0_center.x + poly0_points[i].x;
+            poly0_center.y = poly0_center.y + poly0_points[i].y;
+        }
+        poly0_center.x = parseInt(poly0_center.x/poly0_points.length);
+        poly0_center.y = parseInt(poly0_center.y/poly0_points.length);
+         
+        mat3x3Translate(originTranslate, -poly0_center.x, -poly0_center.y);
+        mat3x3Translate(returnTranslate, poly0_center.x, poly0_center.y);
+        mat3x3Rotate(this.rotationTransform0, this.poly0_r);
+
+        let A0 = Matrix.multiply([this.rotationTransform0, originTranslate]);
+        A0 = Matrix.multiply([returnTranslate, A0]);
+        let poly0 = [
+            Matrix.multiply([A0, Vector3(poly0_points[0].x, poly0_points[0].y, 1)]),
+            Matrix.multiply([A0, Vector3(poly0_points[1].x, poly0_points[1].y, 1)]),
+            Matrix.multiply([A0, Vector3(poly0_points[2].x, poly0_points[2].y, 1)])
+        ];
+
+
+
+        let poly1_center = {x: 0, y: 0 };
+        for (let i = 0; i < poly1_points.length; i++){
+            poly1_center.x = poly1_center.x + poly1_points[i].x;
+            poly1_center.y = poly1_center.y + poly1_points[i].y;
+        }
+        poly1_center.x = parseInt(poly1_center.x/poly1_points.length);
+        poly1_center.y = parseInt(poly1_center.y/poly1_points.length);
+        mat3x3Translate(originTranslate, -poly1_center.x, -poly1_center.y);
+        mat3x3Translate(returnTranslate, poly1_center.x, poly1_center.y);
+        mat3x3Rotate(this.rotationTransform0, this.poly1_r);
+
+        let A1 = Matrix.multiply([this.rotationTransform0, originTranslate]);
+        A1 = Matrix.multiply([returnTranslate, A1]);
+        let poly1 = [
+            Matrix.multiply([A1, Vector3(poly1_points[0].x, poly1_points[0].y, 1)]),
+            Matrix.multiply([A1, Vector3(poly1_points[1].x, poly1_points[1].y, 1)]),
+            Matrix.multiply([A1, Vector3(poly1_points[2].x, poly1_points[2].y, 1)]),
+            Matrix.multiply([A1, Vector3(poly1_points[3].x, poly1_points[3].y, 1)]),
+            Matrix.multiply([A1, Vector3(poly1_points[4].x, poly1_points[4].y, 1)])
+        ];
+
         
-        
+        let poly2_center = {x: 0, y: 0 };
+        for (let i = 0; i < poly2_points.length; i++){
+            poly2_center.x = poly2_center.x + poly2_points[i].x;
+            poly2_center.y = poly2_center.y + poly2_points[i].y;
+        }
+        poly2_center.x = parseInt(poly2_center.x/poly2_points.length);
+        poly2_center.y = parseInt(poly2_center.y/poly2_points.length);
+         
+        mat3x3Translate(originTranslate, -poly2_center.x, -poly2_center.y);
+        mat3x3Translate(returnTranslate, poly2_center.x, poly2_center.y);
+        mat3x3Rotate(this.rotationTransform0, this.poly2_r);
+
+
+        let A2 = Matrix.multiply([this.rotationTransform0, originTranslate]);
+        A2= Matrix.multiply([returnTranslate, A2]);
+        // let A = Matrix.multiply()
+        let poly2 = [
+            Matrix.multiply([A2, Vector3(poly2_points[0].x, poly2_points[0].y, 1)]),
+            Matrix.multiply([A2, Vector3(poly2_points[1].x, poly2_points[1].y, 1)]),
+            Matrix.multiply([A2, Vector3(poly2_points[2].x, poly2_points[2].y, 1)]),
+            Matrix.multiply([A2, Vector3(poly2_points[3].x, poly2_points[3].y, 1)])
+        ];
+        this.drawConvexPolygon(poly0, teal)
+        this.drawConvexPolygon(poly1, gold)
+        this.drawConvexPolygon(poly2, red)   
     }
 
     //
