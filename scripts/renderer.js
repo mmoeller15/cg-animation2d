@@ -16,41 +16,13 @@ class Renderer {
         this.ball_tx = null;
         this.ball_ty = null;
 
-        this.ball_v_x = 250;
-        this.ball_v_y = 250;
+        this.ball_v_x = 350;
+        this.ball_v_y = 350;
 
         this.ball_center = {x: 200, y: 200};
         this.ball_radius = 40;
 
-        this.ball_points = [
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(0), this.ball_center.y + this.ball_radius * Math.sin(0), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 12), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 6), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 4), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 3), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 12), 1),
 
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 2), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 12), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(2 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(2 * Math.PI / 3), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 4), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 6), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 12), 1),
-
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI), this.ball_center.y + this.ball_radius * Math.sin(Math.PI), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(13 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(13 * Math.PI / 12), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 6), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 4), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(4 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(4 * Math.PI / 3), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(17 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(17 * Math.PI / 12), 1),
-
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 2), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(19 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(19 * Math.PI / 12), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 3), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 4), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 6), 1),
-            Vector3(this.ball_center.x + this.ball_radius * Math.cos(23 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(23 * Math.PI / 12), 1),
-        ];
 
         this.rotationTransform0 = new Matrix(3,3);
         
@@ -62,9 +34,23 @@ class Renderer {
         this.poly1_r = Math.PI/4;
         this.poly2_r = Math.PI/6;
 
-        this.poly1_s = null;
-        this.poly2_s = null;
 
+
+        this.poly1_s = 2;
+
+        this.poly1_s_m_x = 1.1;
+        this.poly1_s_m_y = -2;
+
+        this.poly1_s_v = 2;
+        
+
+
+        this.poly2_s = 1;
+        
+        this.poly2_s_m_x = 1.5;
+        this.poly2_s_m_y = 1.5;
+        
+        this.poly2_s_v = 8;
     }
 
 
@@ -121,16 +107,21 @@ class Renderer {
     updateTransforms(time, delta_time) {
         // TODO: update any transformations needed for animation
         
-        this.ball_tx = this.ball_v_x *((delta_time)/1000.0);
-        this.ball_ty = this.ball_v_y *((delta_time)/1000.0);
+        this.ball_tx = this.ball_tx + this.ball_v_x *((delta_time)/1000.0);
+        this.ball_ty = this.ball_ty + this.ball_v_y *((delta_time)/1000.0);
 
 
         this.poly0_r = (this.poly0_r + this.poly0_vel_r*(delta_time/1000)) % (2*Math.PI);
         this.poly1_r = (this.poly1_r + this.poly1_vel_r*(delta_time/1000)) % (2*Math.PI);
         this.poly2_r = (this.poly2_r + this.poly2_vel_r*(delta_time/1000)) % (2*Math.PI);
+        
 
-        this.poly1_s = this.poly1_s *(time + delta_time);
-        this.poly2_s = this.poly2_s *(time + delta_time);
+        this.poly1_s_x = (this.poly1_s_m_x + (Math.cos(this.poly1_s_v *time/1000)));
+        this.poly1_s_y = (this.poly1_s_m_y + (Math.cos(this.poly1_s_v *time/1000)));
+
+        this.poly2_s_x = (this.poly2_s_m_x + (Math.cos(this.poly2_s_v *time/1000)));
+        this.poly2_s_y = (this.poly2_s_m_y + (Math.cos(this.poly2_s_v *time/1000)));
+       
         
     }
     
@@ -157,32 +148,64 @@ class Renderer {
     //
     drawSlide0() {
         // TODO: draw bouncing ball (circle that changes direction whenever it hits an edge)
-        
-        // Following line is example of drawing a single polygon
-        // (this should be removed/edited after you implement the slide)
-        /* let diamond = [
-            Vector3(400, 150, 1),
-            Vector3(500, 300, 1),
-            Vector3(400, 450, 1),
-            Vector3(300, 300, 1)
+
+
+        let ball_points = [
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(0), this.ball_center.y + this.ball_radius * Math.sin(0), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(Math.PI / 2), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(2 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(2 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(Math.PI), this.ball_center.y + this.ball_radius * Math.sin(Math.PI), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(13 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(13 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(4 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(4 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(17 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(17 * Math.PI / 12), 1),
+
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(3 * Math.PI / 2), this.ball_center.y + this.ball_radius * Math.sin(3 * Math.PI / 2), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(19 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(19 * Math.PI / 12), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(5 * Math.PI / 3), this.ball_center.y + this.ball_radius * Math.sin(5 * Math.PI / 3), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(7 * Math.PI / 4), this.ball_center.y + this.ball_radius * Math.sin(7 * Math.PI / 4), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(11 * Math.PI / 6), this.ball_center.y + this.ball_radius * Math.sin(11 * Math.PI / 6), 1),
+            Vector3(this.ball_center.x + this.ball_radius * Math.cos(23 * Math.PI / 12), this.ball_center.y + this.ball_radius * Math.sin(23 * Math.PI / 12), 1),
         ];
-        let teal = [0, 128, 128, 255];
-        this.drawConvexPolygon(diamond, teal); */
 
-        for(let i = 0; i < this.ball_points.length; i++){
-           this.ball_points[i] = Vector3((this.ball_points[i].values[0][0] + this.ball_tx), (this.ball_points[i].values[1][0] + this.ball_ty), 1);
+
+
+        let ball_t = new Matrix(3,3);
+        mat3x3Translate(ball_t, this.ball_tx,this.ball_ty);
+
+        let ball_pts = [];
+
+        for(let i = 0; i < ball_points.length; i++){
+            ball_pts.push(Matrix.multiply([ball_t, ball_points[i]]))
         }
 
-        // hits edge left/right - reverse velocity in x
-        if(this.ball_points[0].values[0][0] >= this.canvas.width || this.ball_points[12].values[0][0] <= 0) {
-                this.ball_v_x = -1 * this.ball_v_x;
-        }
-        // hits edge top/bottom - reverse velocity in y
-        if(this.ball_points[6].values[1][0] >= this.canvas.height || this.ball_points[18].values[1][0] <= 0) {
-            this.ball_v_y = -1 * this.ball_v_y;
-        }
 
-        this.drawConvexPolygon(this.ball_points, [123, 66, 245, 255]);
+            if(ball_pts[0].values[0][0] >= this.canvas.width) {
+                this.ball_v_x = -Math.abs(this.ball_v_x);
+            }
+            if(ball_pts[18].values[1][0] <= 0) {
+                this.ball_v_y = Math.abs(this.ball_v_y);
+            }
+            if(ball_pts[6].values[1][0] >= this.canvas.height) {
+                this.ball_v_y = -Math.abs(this.ball_v_y);
+            }
+            if(ball_pts[12].values[0][0] <= 0) {
+                this.ball_v_x = Math.abs(this.ball_v_x);
+            }
+
+        this.drawConvexPolygon(ball_pts, [123, 66, 245, 255]);
         
     }
 
@@ -292,8 +315,81 @@ class Renderer {
         // TODO: draw at least 2 polygons grow and shrink about their own centers
         //   - have each polygon grow / shrink different sizes
         //   - try at least 1 polygon that grows / shrinks non-uniformly in the x and y directions
+        
+
+        let poly1_s_pts = [
+            Vector3(300, 100, 1),
+            Vector3(330, 200, 1), 
+            Vector3(250, 250, 1),
+            Vector3(170, 200, 1),
+            Vector3(200, 100, 1)
+        ]
+        let poly1_s_center = Vector3(250, 175, 1);
 
 
+        let poly2_s_pts = [
+            Vector3(500, 400, 1),
+            Vector3(550, 400, 1),
+            Vector3(590, 440, 1),
+            Vector3(590, 490, 1),
+            Vector3(550, 530, 1),
+            Vector3(500, 530, 1),
+            Vector3(460, 490, 1),
+            Vector3(460, 440, 1),
+        ]   
+        let poly2_s_center = Vector3(525, 465, 1);
+
+        
+        // translation matrix to origin
+        let t_1 = new Matrix(3,3);
+        mat3x3Translate(t_1, -1 * (poly1_s_center.values[0]), -1 * (poly1_s_center.values[1]));        
+        // scale matrix
+        let s = new Matrix(3,3);
+        mat3x3Scale(s, this.poly1_s_x, this.poly1_s_y);
+        // translation matrix back to center of polygon
+        let t_2 = new Matrix(3,3);
+        mat3x3Translate(t_2, poly1_s_center.values[0], poly1_s_center.values[1]);
+        
+        let t_poly1_s = Matrix.multiply([t_2, s]);
+        t_poly1_s = Matrix.multiply([t_poly1_s, t_1]);
+        
+    
+        let poly1 = [
+            Matrix.multiply([t_poly1_s, poly1_s_pts[0]]),
+            Matrix.multiply([t_poly1_s, poly1_s_pts[1]]),
+            Matrix.multiply([t_poly1_s, poly1_s_pts[2]]),
+            Matrix.multiply([t_poly1_s, poly1_s_pts[3]]),
+            Matrix.multiply([t_poly1_s, poly1_s_pts[4]])
+        ]
+
+
+        // translation matrix to origin
+        let t_1_ = new Matrix(3,3);
+        mat3x3Translate(t_1_, -1 * (poly2_s_center.values[0]), -1 * (poly2_s_center.values[1]));        
+        // scale matrix
+        let s_ = new Matrix(3,3);
+        mat3x3Scale(s_, this.poly2_s_x, this.poly2_s_y);
+        // translation matrix back to center of polygon
+        let t_2_ = new Matrix(3,3);
+        mat3x3Translate(t_2_, poly2_s_center.values[0], poly2_s_center.values[1]);
+        
+        let t_poly2_s = Matrix.multiply([t_2_, s_]);
+        t_poly2_s = Matrix.multiply([t_poly2_s, t_1_]);
+        
+    
+        let poly2 = [
+            Matrix.multiply([t_poly2_s, poly2_s_pts[0]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[1]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[2]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[3]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[4]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[5]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[6]]),
+            Matrix.multiply([t_poly2_s, poly2_s_pts[7]]),
+        ]
+
+        this.drawConvexPolygon(poly1, [44, 99, 105, 255]);
+        this.drawConvexPolygon(poly2, [61, 73, 133, 255]);
     }
 
     //
