@@ -68,6 +68,22 @@ class Renderer {
         this.final_vr = 0;
         this.final_color = [255, 0, 0 , 255];
 
+
+        this.poly1_s = 2;
+
+        this.poly1_s_m_x = 1.1;
+        this.poly1_s_m_y = -2;
+
+        this.poly1_s_v = 2;
+        
+
+
+        this.poly2_s = 1;
+        
+        this.poly2_s_m_x = 1.5;
+        this.poly2_s_m_y = 1.5;
+        
+        this.poly2_s_v = 8;
     }
 
 
